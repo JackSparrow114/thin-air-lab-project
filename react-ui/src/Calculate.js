@@ -5,7 +5,7 @@ import axios from 'axios';
 import "./styles.css";
 import Result from "./Result";
 
-function Predict() {
+function Calculate() {
   const [showData, setShowData] = useState([]);
   //let resData = [];
   const {
@@ -14,11 +14,10 @@ function Predict() {
     formState: { errors }
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     axios.post("http://localhost:3000/run", data)
       .then(function (response) {
-        console.log(response.data);
-        setShowData(response.data);
+        console.log(response.data.msg);
+        setShowData(response.data.msg);
       })
       .catch(function (error) {
         console.log(error);
@@ -68,4 +67,4 @@ function Predict() {
   );
 }
 
-export default Predict;
+export default Calculate;

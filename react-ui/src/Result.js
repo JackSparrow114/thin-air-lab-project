@@ -11,9 +11,7 @@ function Result(props) {
       { 
         <div> 
             <h1>Calculation Results</h1>
-            <h2>The optimum discount price:</h2>
-
-            <label>Based on the calculation, the best price is {"abc"}</label>
+            <label>Based on the calculation, the best price is {resultData}</label>
           </div>
       }
     </div>
