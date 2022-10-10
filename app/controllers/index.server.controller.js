@@ -1,21 +1,36 @@
-const unboundedKnapsack = (values, weights, n, target) => {
-    // create a lookup table
-    // lookup[i] is going to store maximum value
-    // with knapsack capacity i.
-    const lookup = new Array(target + 1).fill(0);
+const unboundedKnapsack = (values, quantities, n, discounts) => {
   
-    // fill lookup[] using above recursive formula
-    for(let i = 0; i <= target; i++){
-      for(let j = 0; j < n; j++){
-        if(weights[j] <= i){
-          lookup[i] = Math.max(lookup[i], lookup[i - weights[j]] + values[j]);
+    let combo = discounts.map((dis, index) => (quantities[index]===0)? 0:dis*values[index]);
+    let totalQuantity = quantities.reduce(
+    (previousValue, currentValue) => previousValue + currentValue,
+    0
+    );
+    let lookup = new Array(totalQuantity).fill(0);
+    console.log(totalQuantity, combo, lookup);  
+
+    for(let i = 0; i < totalQuantity; i++){
+        if(i<5){
+        lookup[i] = combo[i]*(i+1);
+        } else {
+        lookup[i] = getMinValue(i, lookup);
         }
+    }
+    console.log(lookup);
+
+    return lookup[totalQuantity-1];
+}
+  
+  const getMinValue = (i, lookup) => {
+    let midValue = Math.ceil((i+1)/2);
+    let minPrice = Infinity;
+    for(let j=0;j<midValue;j++){
+      let currentPrice = lookup[i-1-j]+lookup[j];
+      if(currentPrice<minPrice){
+        minPrice = currentPrice;
       }
     }
-    
-    //return the max
-    return lookup[target];
-}
+    return minPrice;
+  };
   
 exports.calculate = function (req, res) {
     let inputData = {
@@ -28,15 +43,15 @@ exports.calculate = function (req, res) {
     
     console.log(inputData);
     const values = [8, 8, 8, 8, 8];
-    const weights = [];
-    const target = 8;
+  const quantities = [];
+  const discounts = [1, 0.95, 0.9, 0.8, 0.75];
 
     for (const shirt in inputData) {
-        weights.push(inputData[shirt]);
+        quantities.push(inputData[shirt]);
     }
-    console.log(weights);
+    console.log(quantities);
 
-    let result = unboundedKnapsack(values, weights, values.length - 1, target);
+    let result = unboundedKnapsack(values, quantities, quantities.length, discounts)
     resultStr = result.toString();
     //
     console.log(resultStr);
