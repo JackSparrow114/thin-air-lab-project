@@ -11,7 +11,6 @@ const unboundedKnapsack = (values, quantities, n, discounts) => {
         lookup[i] = getMinValue(i, lookup);
         }
     }
-console.log(lookup);
 
 return lookup[totalQuantity-1];
 }
@@ -37,10 +36,9 @@ exports.calculate = function (req, res) {
         shirt5:parseInt(req.body.shirt5)
     };
     
-    console.log(inputData);
     const values = [8, 8, 8, 8, 8];
-  const quantities = [];
-  const discounts = [1, 0.95, 0.9, 0.8, 0.75];
+    const quantities = [];
+    const discounts = [1, 0.95, 0.9, 0.8, 0.75];
 
     for (const shirt in inputData) {
         quantities.push(inputData[shirt]);
@@ -49,12 +47,10 @@ exports.calculate = function (req, res) {
     const newValues = values.filter((v, index) => quantities[index] !== 0);
     const totalZeros = quantities.length - newQuantities.length;
     discounts.splice(discounts.length - 2, totalZeros);
-    console.log(newQuantities, totalZeros, newValues, discounts);
 
     let result = unboundedKnapsack(newValues, newQuantities, newQuantities.length, discounts);
     resultStr = result.toString();
     //
-    console.log(resultStr);
     async function run() {
         return res.send({status: 200, msg:resultStr})
     } //end of run function
